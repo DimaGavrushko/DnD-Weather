@@ -6,7 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import WeatherScreen from '../screens/WeatherScreen';
 import GraphicScreen from '../screens/GraphicScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { TabBar } from "react-native-animated-nav-tab-bar";
+import { TabBar } from 'react-native-animated-nav-tab-bar';
 const config = Platform.select({
     web: {headerMode: 'screen'},
     default: {},
@@ -27,7 +27,7 @@ WeatherStack.navigationOptions = {
             name={
                 Platform.OS === 'ios'
                     ? `ios-cloud-circle`
-                    : 'md-information-circle'
+                    : 'md-cloud-circle'
             }
         />
     ),
