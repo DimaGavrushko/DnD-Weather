@@ -3,19 +3,26 @@ import {
     ScrollView,
     StyleSheet,
     View,
-    Text
+    Text,
 } from 'react-native';
 
-export default function WeatherScreen() {
-    return (
-        <View style={styles.container}>
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}>
-                <Text>Weather</Text>
-            </ScrollView>
-        </View>
-    );
+export default class WeatherScreen extends React.Component {
+
+    constructor() {
+        super();
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={styles.contentContainer}>
+                    <Text>Weather</Text>
+                </ScrollView>
+            </View>
+        );
+    }
 }
 
 WeatherScreen.navigationOptions = {

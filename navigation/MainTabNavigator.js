@@ -6,7 +6,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import WeatherScreen from '../screens/WeatherScreen';
 import GraphicScreen from '../screens/GraphicScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { TabBar } from 'react-native-animated-nav-tab-bar';
+import {TabBar} from 'react-native-animated-nav-tab-bar';
+
 const config = Platform.select({
     web: {headerMode: 'screen'},
     default: {},
@@ -14,7 +15,7 @@ const config = Platform.select({
 
 const WeatherStack = createStackNavigator(
     {
-        Home: WeatherScreen,
+        Weather: WeatherScreen,
     },
     config
 );
@@ -37,7 +38,7 @@ WeatherStack.path = '';
 
 const GraphicStack = createStackNavigator(
     {
-        Links: GraphicScreen,
+        Graphic: GraphicScreen,
     },
     config
 );
@@ -66,11 +67,11 @@ SettingsStack.navigationOptions = {
 };
 
 SettingsStack.path = '';
-const tabNavigator =createBottomTabNavigator(
+const tabNavigator = createBottomTabNavigator(
     {
-      Weather: WeatherStack,
-      Graphic: GraphicStack,
-      Settings:SettingsStack,
+        Weather: WeatherStack,
+        Graphic: GraphicStack,
+        Settings: SettingsStack,
     }, {
         tabBarOptions: {
             activeTintColor: "#2B7C85",
@@ -81,7 +82,7 @@ const tabNavigator =createBottomTabNavigator(
             {...props}
         />,
     }
-)
+);
 
 tabNavigator.path = '';
 export default tabNavigator;

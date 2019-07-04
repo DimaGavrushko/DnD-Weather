@@ -1,12 +1,14 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
 
-export default function GraphicScreen() {
-    return (
-        <ScrollView style={styles.container}>
-            <Text>Graphic</Text>
-        </ScrollView>
-    );
+export default class GraphicScreen extends React.Component {
+    render() {
+        return (
+            <ScrollView style={styles.container}>
+                <Text>Graphic</Text>
+            </ScrollView>
+        );
+    }
 }
 
 GraphicScreen.navigationOptions = {
