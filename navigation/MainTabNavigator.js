@@ -26,7 +26,7 @@ WeatherStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
+          ? `ios-cloud-circle`
           : 'md-information-circle'
       }
     />
