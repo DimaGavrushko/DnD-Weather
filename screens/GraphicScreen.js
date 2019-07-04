@@ -1,27 +1,22 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import {ScrollView, StyleSheet, Text} from 'react-native';
 
 export default function GraphicScreen() {
-  return (
-    <ScrollView style={styles.container}>
-      {/**
-       * Go ahead and delete ExpoLinksView and replace it with your content;
-       * we just wanted to provide you with some helpful links.
-       */}
-      <ExpoLinksView />
-    </ScrollView>
-  );
+    return (
+        <ScrollView style={styles.container}>
+            <Text>Graphic</Text>
+        </ScrollView>
+    );
 }
 
 GraphicScreen.navigationOptions = {
-  title: 'Graphic',
+    title: 'Graphic',
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
+    container: {
+        flex: 1,
+        paddingTop: 15,
+        backgroundColor: '#fff',
+    },
 });
