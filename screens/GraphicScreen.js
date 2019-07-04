@@ -15,7 +15,7 @@ export default function GraphicScreen() {
 }
 
 GraphicScreen.navigationOptions = {
-  title: 'Links',
+  title: 'Graphic',
 };
 
 const styles = StyleSheet.create({
