@@ -1,10 +1,16 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBar from "react-native-tab-bar-interaction";
+=======
+import {Platform} from 'react-native';
+import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
+
+>>>>>>> a02cab325e78fbe3d42046cdfe378f2f98e3530c
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import WeatherScreen from '../screens/WeatherScreen';
+import GraphicScreen from '../screens/GraphicScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 // render() {
@@ -43,17 +49,18 @@ import SettingsScreen from '../screens/SettingsScreen';
 // }
 
 const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
+    web: {headerMode: 'screen'},
+    default: {},
 });
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
+const WeatherStack = createStackNavigator(
+    {
+        Home: WeatherScreen,
+    },
+    config
 );
 
+<<<<<<< HEAD
 HomeStack.navigationOptions = {
   tabBarLabel: 'Weather',
   tabBarIcon: ({ focused }) => (
@@ -66,46 +73,60 @@ HomeStack.navigationOptions = {
       }
     />
   ),
+=======
+WeatherStack.navigationOptions = {
+    tabBarLabel: 'Weather',
+    tabBarIcon: ({focused}) => (
+        <TabBarIcon
+            focused={focused}
+            name={
+                Platform.OS === 'ios'
+                    ? `ios-cloud-circle`
+                    : 'md-information-circle'
+            }
+        />
+    ),
+>>>>>>> a02cab325e78fbe3d42046cdfe378f2f98e3530c
 };
 
-HomeStack.path = '';
+WeatherStack.path = '';
 
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
-  },
-  config
+const GraphicStack = createStackNavigator(
+    {
+        Links: GraphicScreen,
+    },
+    config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Graphic',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
+GraphicStack.navigationOptions = {
+    tabBarLabel: 'Graphic',
+    tabBarIcon: ({focused}) => (
+        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}/>
+    ),
 };
 
-LinksStack.path = '';
+GraphicStack.path = '';
 
 const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
+    {
+        Settings: SettingsScreen,
+    },
+    config
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
+    tabBarLabel: 'Settings',
+    tabBarIcon: ({focused}) => (
+        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}/>
+    ),
 };
 
 SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+    WeatherStack,
+    GraphicStack,
+    SettingsStack,
 });
 
 tabNavigator.path = '';
