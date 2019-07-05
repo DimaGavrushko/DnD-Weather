@@ -11,50 +11,45 @@ import settings from '../settings';
 export default class WeatherScreen extends React.Component {
 
     state = {
-        isLoading: true,
+        isLoading: false,
         currWeather: {},
     };
 
-    getCurrentWeather() {
-        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`, {
+    componentDidMount() {
+        this.setState({isLoading: true,});
+        fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            }
-        }).then(res => {
-            res.json()
-                .then(resJson => {
-                    this.setState({
-                        isLoading: false,
-                        currWeather: resJson,
-                    });
-                });
+            }}).then(res => {
+                this.setState({
+                    isLoading: false,
+                    currWeather: res,
+                })
         });
     }
 
-    componentDidMount() {
-        this.getCurrentWeather();
-    }
-
     render() {
-        if (!this.state.isLoading) {
+        const {isLoading, currWeather} = this.state;
+
+        if (isLoading) {
             return (
-                <View style={styles.container}>
-                    <ScrollView
-                        style={styles.container}
-                        contentContainerStyle={styles.contentContainer}>
-                        <Text>Weather in {this.state.currWeather.name} {settings.location_id}</Text>
-                    </ScrollView>
+                <View style={styles.activityIndicator}>
+                    <ActivityIndicator size='large' color='#2B7C85'/>
                 </View>
-            );
+            )
         }
 
         return (
-            <View style={styles.activityIndicator}>
-                <ActivityIndicator size='large' color='#2B7C85'/>
+            <View style={styles.container}>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={styles.contentContainer}>
+                    <Text>Weather in {currWeather.name} {settings.location_id}</Text>
+                </ScrollView>
             </View>
-        )
+        );
     }
 }
 
