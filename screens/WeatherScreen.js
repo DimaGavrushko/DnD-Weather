@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import settings from '../settings';
 import {MonoText} from "../components/StyledText";
+import WeatherCard from "../components/WeatherCard";
 
 export default class WeatherScreen extends React.Component {
 
@@ -45,37 +46,11 @@ export default class WeatherScreen extends React.Component {
                 <View style={styles.container}>
                     <ScrollView
                         style={styles.container}>
-                        <View style={styles.mainCard}>
-                            <MonoText style={styles.mainCardBigText}>{currWeather.name}</MonoText>
-                            <MonoText style={styles.mainCardSmallText}>{currWeather.weather[0].main}: {currWeather.weather[0].description}</MonoText>
-                            <View style={styles.weather}>
-                                <Image
-                                    style={{
-                                        width: 100,
-                                        height: 100,
-                                        margin: 0,
-                                        padding: 0
-                                    }}
-                                    source={{uri: `http://openweathermap.org/img/wn/${currWeather.weather[0].icon}@2x.png`}}
-                                />
-                                <MonoText style={styles.temperatureText}>{currWeather.main.temp} {getCurrentUnit()}</MonoText>
-                            </View>
-                        </View>
+                        <WeatherCard currWeather={currWeather}/>
                     </ScrollView>
                 </View>
             );
         }
-    }
-}
-
-function getCurrentUnit() {
-    switch (settings.units) {
-        case 'metric':
-            return '\u2103';
-        case 'imperial':
-            return '\u2109';
-        default:
-            return '\u212A';
     }
 }
 
@@ -99,7 +74,7 @@ const styles = StyleSheet.create({
         padding: 15,
         width: '100%',
         height: 300,
-        backgroundColor: 'skyblue'
+        backgroundColor: new Date().getHours() > 18 ? 'steelblue' : 'skyblue'
     },
     mainCardBigText: {
         textAlign: 'center',
@@ -121,6 +96,6 @@ const styles = StyleSheet.create({
     temperatureText: {
         fontSize: 40,
         color: 'white',
-        marginTop: 18
+        marginTop: 21
     }
 });
