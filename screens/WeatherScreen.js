@@ -4,24 +4,57 @@ import {
     StyleSheet,
     View,
     Text,
+    ActivityIndicator
 } from 'react-native';
+import settings from '../settings';
 
 export default class WeatherScreen extends React.Component {
 
-    constructor() {
-        super();
+    state = {
+        isLoading: true,
+        currWeather: {},
+    };
+
+    getCurrentWeather() {
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {
+            res.json()
+                .then(resJson => {
+                    this.setState({
+                        isLoading: false,
+                        currWeather: resJson,
+                    });
+                });
+        });
+    }
+
+    componentDidMount() {
+        this.getCurrentWeather();
     }
 
     render() {
+        if (!this.state.isLoading) {
+            return (
+                <View style={styles.container}>
+                    <ScrollView
+                        style={styles.container}
+                        contentContainerStyle={styles.contentContainer}>
+                        <Text>Weather in {this.state.currWeather.name} {settings.location_id}</Text>
+                    </ScrollView>
+                </View>
+            );
+        }
+
         return (
-            <View style={styles.container}>
-                <ScrollView
-                    style={styles.container}
-                    contentContainerStyle={styles.contentContainer}>
-                    <Text>Weather</Text>
-                </ScrollView>
+            <View style={styles.activityIndicator}>
+                <ActivityIndicator size='large' color='#2B7C85'/>
             </View>
-        );
+        )
     }
 }
 
@@ -37,5 +70,10 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingTop: 30,
+    },
+    activityIndicator: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
     }
 });
