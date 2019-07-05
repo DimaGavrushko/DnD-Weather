@@ -44,9 +44,10 @@ export default class WeatherScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView
-                    style={styles.container}
-                    contentContainerStyle={styles.contentContainer}>
-                    <Text>Weather in {currWeather.name} {settings.location_id}</Text>
+                    style={styles.container}>
+                    <View style={styles.mainCard}>
+                        <Text style={{textAlign: 'center'}}>{currWeather.name}</Text>
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -61,14 +62,18 @@ WeatherScreen.navigationOptions = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         backgroundColor: '#fff',
-    },
-    contentContainer: {
-        paddingTop: 30,
     },
     activityIndicator: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center'
+    },
+    mainCard: {
+        padding: 15,
+        width: '100%',
+        height: 300,
+        backgroundColor: 'skyblue'
     }
 });
