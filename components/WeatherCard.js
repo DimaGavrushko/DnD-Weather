@@ -24,7 +24,7 @@ export default class WeatherCard extends React.Component {
                 <View style={{flexDirection: 'row'}}>
                     <MonoText style={{
                         ...styles.mainCardSmallText,
-                        textAlign: 'left',
+                        marginRight: 'auto',
                     }}>{new Date().toDateString()}</MonoText>
                     <MonoText style={{
                         ...styles.mainCardSmallText,
