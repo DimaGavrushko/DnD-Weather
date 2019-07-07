@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     mainCard: {
         padding: 15,
         width: '100%',
-        height: 300,
+        height: 270,
         backgroundColor: choseBackgroundColor()
     },
     mainCardBigText: {
