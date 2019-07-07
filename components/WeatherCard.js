@@ -2,6 +2,7 @@ import React from 'react';
 import {MonoText} from "./StyledText";
 import {Image, StyleSheet, View} from "react-native";
 import settings from "../settings";
+import Colors from "../constants/Colors";
 
 export default class WeatherCard extends React.Component {
 
@@ -47,12 +48,25 @@ function getCurrentUnit() {
     }
 }
 
+function choseBackgroundColor() {
+    let hours = new Date().getHours();
+    if (hours >= 6 && hours < 12) {
+        return Colors.morning;
+    } else if (hours >= 12 && hours < 18) {
+        return Colors.day;
+    } else if (hours >= 18 && hours < 0) {
+        return Colors.evening;
+    } else if (hours >= 0 && hours < 6) {
+        return Colors.night;
+    }
+}
+
 const styles = StyleSheet.create({
     mainCard: {
         padding: 15,
         width: '100%',
         height: 300,
-        backgroundColor: new Date().getHours() > 18 ? 'steelblue' : 'skyblue'
+        backgroundColor: choseBackgroundColor()
     },
     mainCardBigText: {
         textAlign: 'center',
@@ -74,6 +88,6 @@ const styles = StyleSheet.create({
     temperatureText: {
         fontSize: 40,
         color: 'white',
-        marginTop: 20
+        marginTop: 23
     }
 });
