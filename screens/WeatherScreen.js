@@ -3,25 +3,22 @@ import {
     ScrollView,
     StyleSheet,
     View,
-    ActivityIndicator, Image
+    ActivityIndicator,
 } from 'react-native';
 import settings from '../settings';
 import WeatherCard from "../components/WeatherCard";
-import Colors from "../constants/Colors";
-import {MonoText} from "../components/StyledText";
 import ForecastTable from "../components/ForecastTable";
 
 export default class WeatherScreen extends React.Component {
 
     state = {
-        isLoading: false,
+        isLoading: true,
         currWeather: {},
         forecast: {}
     };
 
-    componentDidMount() {
-        this.setState({isLoading: true});
-        fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
+    getData() {
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
             .then(currWeather => {
                 currWeather.json().then(currWeatherJson => {
                     fetch(`http://api.openweathermap.org/data/2.5/forecast?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
@@ -39,6 +36,7 @@ export default class WeatherScreen extends React.Component {
     }
 
     render() {
+        this.getData();
         const {isLoading, currWeather, forecast} = this.state;
 
         if (isLoading || !Object.keys(currWeather).length) {
