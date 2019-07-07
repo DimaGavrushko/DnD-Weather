@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     temperatureText: {
         fontSize: 40,
         color: 'white',
-        marginTop: 23
+        marginTop: 22
     }
 });
