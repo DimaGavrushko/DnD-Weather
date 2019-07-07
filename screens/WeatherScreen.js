@@ -3,25 +3,22 @@ import {
     ScrollView,
     StyleSheet,
     View,
-    ActivityIndicator, Image
+    ActivityIndicator,
 } from 'react-native';
 import settings from '../settings';
 import WeatherCard from "../components/WeatherCard";
-import Colors from "../constants/Colors";
-import {MonoText} from "../components/StyledText";
 import ForecastTable from "../components/ForecastTable";
 
 export default class WeatherScreen extends React.Component {
 
     state = {
-        isLoading: false,
+        isLoading: true,
         currWeather: {},
         forecast: {}
     };
 
-    componentDidMount() {
-        this.setState({isLoading: true});
-        fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
+    getData() {
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
             .then(currWeather => {
                 currWeather.json().then(currWeatherJson => {
                     fetch(`http://api.openweathermap.org/data/2.5/forecast?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
@@ -39,6 +36,7 @@ export default class WeatherScreen extends React.Component {
     }
 
     render() {
+        this.getData();
         const {isLoading, currWeather, forecast} = this.state;
 
         if (isLoading || !Object.keys(currWeather).length) {
@@ -77,42 +75,5 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center'
-    },
-    mainCard: {
-        padding: 15,
-        width: '100%',
-        height: 300,
-        backgroundColor: new Date().getHours() > 18 ? 'steelblue' : 'skyblue'
-    },
-    mainCardBigText: {
-        textAlign: 'center',
-        fontSize: 25,
-        color: 'white',
-        fontWeight: 'bold'
-    },
-    mainCardSmallText: {
-        textAlign: 'center',
-        fontSize: 18,
-        color: 'white',
-    },
-    weather: {
-        flex: 1,
-        marginTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    temperatureText: {
-        fontSize: 40,
-        color: 'white',
-        marginTop: 21
-    },
-    forecastTable: {
-        borderWidth: 2,
-        borderColor: Colors.tabIconDefault,
-        borderRadius: 5,
-        height: 100,
-        marginTop: -5,
-        backgroundColor: 'white',
-        padding: 10
     }
 });

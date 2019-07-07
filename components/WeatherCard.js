@@ -54,7 +54,7 @@ function choseBackgroundColor() {
         return Colors.morning;
     } else if (hours >= 12 && hours < 18) {
         return Colors.day;
-    } else if (hours >= 18 && hours < 0) {
+    } else if (hours >= 18 && hours <= 23) {
         return Colors.evening;
     } else if (hours >= 0 && hours < 6) {
         return Colors.night;
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     mainCard: {
         padding: 15,
         width: '100%',
-        height: 300,
+        height: 270,
         backgroundColor: choseBackgroundColor()
     },
     mainCardBigText: {
