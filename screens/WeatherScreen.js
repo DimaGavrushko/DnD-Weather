@@ -2,7 +2,9 @@ import React from 'react';
 import {
     StyleSheet,
     View,
+    ScrollView,
     ActivityIndicator,
+    RefreshControl
 } from 'react-native';
 import WeatherCard from "../components/WeatherCard";
 import ForecastTable from "../components/ForecastTable";
@@ -12,6 +14,7 @@ export default class WeatherScreen extends React.Component {
 
     state = {
         isLoading: true,
+        isRefreshing: false,
         currWeather: {},
         forecast: {}
     };
@@ -47,6 +50,13 @@ export default class WeatherScreen extends React.Component {
         }
     }
 
+    onRefresh = () => {
+        this.setState({isRefreshing: true});
+        this.getWeatherAndForecast(this.props).then(() => {
+            this.setState({isRefreshing: false});
+        });
+    };
+
     render() {
         const {isLoading, currWeather, forecast} = this.state;
         if (isLoading || !Object.keys(currWeather).length) {
@@ -57,13 +67,17 @@ export default class WeatherScreen extends React.Component {
             )
         } else {
             return (
-                <View style={styles.container}>
-                    <View
-                        style={styles.container}>
-                        <WeatherCard currWeather={currWeather} units={this.props.units}/>
-                        <ForecastTable forecast={forecast}/>
-                    </View>
-                </View>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    style={styles.container}>
+                    <WeatherCard currWeather={currWeather} units={this.props.units}/>
+                    <ForecastTable forecast={forecast}/>
+                </ScrollView>
             );
         }
     }
