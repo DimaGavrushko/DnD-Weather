@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, View, Button} from 'react-native';
-import settings from '../settings';
 
 export default class SettingsScreen extends React.Component {
     render() {
@@ -8,7 +7,7 @@ export default class SettingsScreen extends React.Component {
             <View>
                 <Text>Settings</Text>
                 <Button title='Press' onPress={() => {
-                    settings.location_id = '523750';
+                    this.props.changeLocation('50.519871', '22.139681');
                 }}/>
             </View>
         );
