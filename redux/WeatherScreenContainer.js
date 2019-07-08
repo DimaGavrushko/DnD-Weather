@@ -9,7 +9,7 @@ const mapStateToProps = ({api_key, lat, lon,  units}) => ({
     units
 });
 
-function change_location(lat, lon) {
+function changeLocation(lat, lon) {
     return {
         type: CHANGE_LOCATION,
         payload: {
@@ -20,7 +20,7 @@ function change_location(lat, lon) {
 }
 
 const mapDispatchToProps = {
-    change_location
+    changeLocation
 };
 
 const WeatherScreenContainer = connect(mapStateToProps, mapDispatchToProps)(WeatherScreen);

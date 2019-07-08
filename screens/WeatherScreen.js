@@ -18,7 +18,7 @@ export default class WeatherScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        getCurrentCoordinates().then(res => props.change_location(...res));
+        getCurrentCoordinates().then(res => props.changeLocation(...res));
     }
 
     getWeatherAndForecast(props) {
@@ -60,7 +60,7 @@ export default class WeatherScreen extends React.Component {
                 <View style={styles.container}>
                     <View
                         style={styles.container}>
-                        <WeatherCard currWeather={currWeather}/>
+                        <WeatherCard currWeather={currWeather} units={this.props.units}/>
                         <ForecastTable forecast={forecast}/>
                     </View>
                 </View>

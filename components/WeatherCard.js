@@ -1,13 +1,12 @@
 import React from 'react';
 import {MonoText} from "./StyledText";
 import {Image, StyleSheet, View} from "react-native";
-import settings from "../settings";
 import Colors from "../constants/Colors";
 
 export default class WeatherCard extends React.Component {
 
     render() {
-        let currWeather = this.props.currWeather;
+        let {currWeather, units} = this.props;
         return (
             <View style={styles.mainCard}>
                 <MonoText
@@ -20,7 +19,7 @@ export default class WeatherCard extends React.Component {
                         source={{uri: `http://openweathermap.org/img/wn/${currWeather.weather[0].icon}@2x.png`}}
                     />
                     <MonoText
-                        style={styles.temperatureText}>{currWeather.main.temp} {getCurrentUnit()}</MonoText>
+                        style={styles.temperatureText}>{currWeather.main.temp} {getCurrentUnit(units)}</MonoText>
                 </View>
                 <View style={{flexDirection: 'row'}}>
                     <MonoText style={{
@@ -37,8 +36,8 @@ export default class WeatherCard extends React.Component {
     }
 }
 
-function getCurrentUnit() {
-    switch (settings.units) {
+function getCurrentUnit(units) {
+    switch (units) {
         case 'metric':
             return '\u2103';
         case 'imperial':

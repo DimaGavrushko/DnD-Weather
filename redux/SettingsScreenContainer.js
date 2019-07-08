@@ -6,7 +6,7 @@ const mapStateToProps = (state) => ({
     ...state
 });
 
-function change_location(lat, lon) {
+function changeLocation(lat, lon) {
     return {
         type: CHANGE_LOCATION,
         payload: {
@@ -17,7 +17,7 @@ function change_location(lat, lon) {
 }
 
 const mapDispatchToProps = {
-    change_location
+    changeLocation
 };
 
 const SettingsScreenContainer = connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
