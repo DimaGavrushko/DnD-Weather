@@ -3,19 +3,20 @@ import {Platform} from 'react-native';
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import WeatherScreen from '../screens/WeatherScreen';
+import WeatherScreenContainer from '../redux/WeatherScreenContainer';
 import GraphicScreen from '../screens/GraphicScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import {TabBar} from 'react-native-animated-nav-tab-bar';
+import SettingsScreenContainer from '../redux/SettingsScreenContainer';
 
 const config = Platform.select({
     web: {headerMode: 'screen'},
     default: {},
 });
 
+
 const WeatherStack = createStackNavigator(
     {
-        Weather: WeatherScreen,
+        Weather: WeatherScreenContainer,
     },
     config
 );
@@ -54,7 +55,7 @@ GraphicStack.path = '';
 
 const SettingsStack = createStackNavigator(
     {
-        Settings: SettingsScreen,
+        Settings: SettingsScreenContainer,
     },
     config
 );

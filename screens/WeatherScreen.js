@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-    ScrollView,
     StyleSheet,
     View,
     ActivityIndicator,
 } from 'react-native';
-import settings from '../settings';
 import WeatherCard from "../components/WeatherCard";
 import ForecastTable from "../components/ForecastTable";
+import {getCurrentCoordinates} from "../utils";
 
 export default class WeatherScreen extends React.Component {
 
@@ -17,11 +16,17 @@ export default class WeatherScreen extends React.Component {
         forecast: {}
     };
 
-    getData() {
-        return fetch(`http://api.openweathermap.org/data/2.5/weather?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
+    constructor(props) {
+        super(props);
+        getCurrentCoordinates().then(res => props.change_location(...res));
+    }
+
+    getWeatherAndForecast(props) {
+        let {api_key, lat, lon, units} = props;
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
             .then(currWeather => {
                 currWeather.json().then(currWeatherJson => {
-                    fetch(`http://api.openweathermap.org/data/2.5/forecast?id=${settings.location_id}&appid=${settings.key}&units=${settings.units}`)
+                    fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
                         .then(forecast => {
                             forecast.json().then(forecastJson => {
                                 this.setState({
@@ -35,10 +40,15 @@ export default class WeatherScreen extends React.Component {
             });
     }
 
-    render() {
-        this.getData();
-        const {isLoading, currWeather, forecast} = this.state;
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.setState({isLoading: true});
+            this.getWeatherAndForecast(this.props);
+        }
+    }
 
+    render() {
+        const {isLoading, currWeather, forecast} = this.state;
         if (isLoading || !Object.keys(currWeather).length) {
             return (
                 <View style={styles.activityIndicator}>
