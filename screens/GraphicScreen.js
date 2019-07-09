@@ -53,22 +53,34 @@ export default class GraphicScreen extends React.Component {
         }
     };
 
+
+
+
     createDateForecast = (forecast) => {
         let result = [];
         let temporary = [];
-        forecast.list.forEach((item) => {
-            let tmp = item.dt_txt.split(/[- :]/);
-            tmp[1] = (tmp[1] - 1).toString();
-            let date = new Date(...tmp);
-            let temp = item.main;
-            temporary.push({
-                date: date,
-                time: date.getHours(),
-                main: temp
-            });
-            if (date.getHours() === 0) {
+        returnDateTimeMainR = (item) => {
+              let tmp = item.dt_txt.split(/[- :]/);
+              tmp[1] = (tmp[1] - 1).toString();
+              let date = new Date(...tmp);
+              let temp = item.main;
+              var resultObj = {
+                  date: date,
+                  time: date.getHours(),
+                  main: temp
+              }
+              return resultObj;
+            };
+        forecast.list.forEach(function(item, index, array) {
+          let itemToAdd = this.returnDateTimeMainR(item);
+          console.log(itemToAdd);
+            temporary.push(itemToAdd);
+            if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
+              if((index + 1) < forecast.list.length){
+                temporary.push(this.returnDateTimeMainR(forecast.list[index + 1]));
+              }
                 result.push(temporary);
-                temporary = [temporary[temporary.length - 1]];
+                temporary = [];
             }
         });
         return result;
@@ -88,12 +100,12 @@ export default class GraphicScreen extends React.Component {
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
+        console.log();
         forecast = forecasts[index].map(this.resultHour);
         if (forecast.length < 3) {
-
             let addData = forecasts[index + 1].map(this.resultHour);
-
-            //console.log(addData);
+            console.log('++++++++++');
+            console.log(forecast);
             console.log('++++++++++');
             forecast = forecast.concat(addData);
             console.log(forecast);
@@ -120,7 +132,7 @@ export default class GraphicScreen extends React.Component {
                                        daySelectionAnimation={{
                                            type: 'border',
                                            duration: 200,
-                                           borderWidth: 1,
+                                           borderWidth: 1.5,
                                            borderHighlightColor: 'white'
                                        }}
                                        style={{height: 110, paddingTop: 5, paddingBottom: 10, marginBottom: 10}}
