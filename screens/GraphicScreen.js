@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, Image} from 'react-native';
 import {View} from 'react-native'
-import {BarChartExample} from '../components/Graphic.js'
+import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
@@ -51,8 +51,7 @@ export default class GraphicScreen extends React.Component {
         } else if (hours >= 0 && hours < 6) {
             return ([Colors.night, Colors.disabledNight]);
         }
-    }
-
+    };
 
     createDateForecast = (forecast) => {
         let result = [];
@@ -72,27 +71,27 @@ export default class GraphicScreen extends React.Component {
                 temporary = [temporary[temporary.length - 1]];
             }
         });
-        //console.log(result)
         return result;
-    }
+    };
 
-    resautlHour = (item) => {
-        timeAsString = item.time.toString();
+    resultHour = (item) => {
+        let timeAsString = item.time.toString();
         let timeView = (timeAsString.length === 1 ? ('0' + timeAsString) : timeAsString) + ':00';
         let temperature = Math.round(item.main.temp);
-        var resaultForHour = {x: timeView, y: temperature};
-        return resaultForHour;
-    }
+        let resultForHour = {x: timeView, y: temperature};
+        return resultForHour;
+    };
+
     chooseDate = (date) => {
         let {forecast} = this.state;
         date = date.format('YYYY-MM-DD');
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
-        var forecasts = this.createDateForecast(forecast);
-        forecast = forecasts[index].map(this.resautlHour);
+        let forecasts = this.createDateForecast(forecast);
+        forecast = forecasts[index].map(this.resultHour);
         if (forecast.length < 3) {
 
-            let addData = forecasts[index + 1].map(this.resautlHour);
+            let addData = forecasts[index + 1].map(this.resultHour);
 
             //console.log(addData);
             console.log('++++++++++');
@@ -100,7 +99,7 @@ export default class GraphicScreen extends React.Component {
             console.log(forecast);
             console.log('++++++++++');
         }
-        newDateGraphic = Array.from(forecast);
+        let newDateGraphic = Array.from(forecast);
         this.setState({dateGraphic: newDateGraphic}, function () {
             console.log(this.state.dateGraphic);
         });
@@ -115,9 +114,7 @@ export default class GraphicScreen extends React.Component {
 
         return (
             <View style={styles.container}>
-                <ScrollView
-                    style={styles.container}
-                    contentContainerStyle={styles.contentContainer}>
+                <ScrollView>
                     <View style={{flex: 1}}>
                         <CalendarStrip calendarAnimation={{type: 'sequence', duration: 30}}
                                        daySelectionAnimation={{

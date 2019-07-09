@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, Image, Dimensions, PixelRatio, View} from 'react-native';
 import PureChart from 'react-native-pure-chart';
 
-export class BarChartExample extends React.PureComponent {
+export default class BarChartExample extends React.PureComponent {
     render() {
         return (
             // <View style={{padding: 0, marginTop: 20}}>
@@ -33,5 +33,3 @@ export class BarChartExample extends React.PureComponent {
         )
     }
 }
-
-export default BarChartExample
