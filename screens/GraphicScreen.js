@@ -135,7 +135,7 @@ export default class GraphicScreen extends React.Component {
                                            borderWidth: 1.5,
                                            borderHighlightColor: 'white'
                                        }}
-                                       style={{height: 110, paddingTop: 5, paddingBottom: 10, marginBottom: 10}}
+                                       style={{height: 110, paddingTop: 10, paddingBottom: 10, marginBottom: 10}}
                                        calendarHeaderStyle={{color: 'white'}}
                                        calendarColor={this.choseBackgroundColor()[0]}
                                        dateNumberStyle={{color: 'white'}}
@@ -149,8 +149,31 @@ export default class GraphicScreen extends React.Component {
                                        datesWhitelist={datesWhitelist}/>
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-                                style={{paddingTop: 10, paddingBottom: 10}}>
+                                style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
                         <BarChartExample data={dateGraphic}/>
+                    </ScrollView>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+                                style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
+                        <Text>Child </Text>
                     </ScrollView>
                 </ScrollView>
             </View>
