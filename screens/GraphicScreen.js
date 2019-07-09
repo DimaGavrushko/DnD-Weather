@@ -1,8 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, Image } from 'react-native';
 import { View } from 'react-native'
-//import { BarChart, Grid, YAxis } from 'react-native-svg-charts'
-//import * as scale from 'd3-scale'
 import { BarChartExample } from '../components/Graphic.js'
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
