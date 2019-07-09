@@ -13,3 +13,23 @@ export function getCurrentCoordinates() {
         );
     })
 }
+
+export function getCurrentWeather(props) {
+    let {api_key, lat, lon, units} = props;
+    return fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
+        .then(currWeather => {
+            return currWeather.json().then(currWeatherJson => {
+                return currWeatherJson;
+            });
+        });
+}
+
+export function getCurrentForecast(props) {
+    let {api_key, lat, lon, units} = props;
+    return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
+        .then(forecast => {
+            return forecast.json().then(forecastJson => {
+                return forecastJson;
+            });
+        });
+}

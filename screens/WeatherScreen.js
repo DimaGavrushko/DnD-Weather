@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import WeatherCard from "../components/WeatherCard";
 import ForecastTable from "../components/ForecastTable";
-import {getCurrentCoordinates} from "../utils";
+import {getCurrentCoordinates, getCurrentForecast, getCurrentWeather} from "../utils";
 
 export default class WeatherScreen extends React.Component {
 
@@ -24,36 +24,31 @@ export default class WeatherScreen extends React.Component {
         getCurrentCoordinates().then(res => props.changeLocation(...res));
     }
 
-    getWeatherAndForecast(props) {
-        let {api_key, lat, lon, units} = props;
-        return fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
-            .then(currWeather => {
-                currWeather.json().then(currWeatherJson => {
-                    fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
-                        .then(forecast => {
-                            forecast.json().then(forecastJson => {
-                                this.setState({
-                                    isLoading: false,
-                                    currWeather: currWeatherJson,
-                                    forecast: forecastJson
-                                });
-                            })
-                        });
-                });
-            });
-    }
-
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({isLoading: true});
-            this.getWeatherAndForecast(this.props);
+            getCurrentWeather(this.props).then(currWeather => {
+                getCurrentForecast(this.props).then(forecast => {
+                    this.setState({
+                        isLoading: false,
+                        currWeather,
+                        forecast
+                    });
+                });
+            });
         }
     }
 
     onRefresh = () => {
         this.setState({isRefreshing: true});
-        this.getWeatherAndForecast(this.props).then(() => {
-            this.setState({isRefreshing: false});
+        getCurrentWeather(this.props).then(currWeather => {
+            getCurrentForecast(this.props).then(forecast => {
+                this.setState({
+                    isRefreshing: false,
+                    currWeather,
+                    forecast
+                });
+            });
         });
     };
 
