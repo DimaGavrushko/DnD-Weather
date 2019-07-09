@@ -14,5 +14,7 @@ export default {
     morning: '#71bcf0',
     day: tintColor,
     evening: '#18467a',
-    night: '#131862'
+    night: '#131862',
+    disabledDay: 'red',
+    disabledNight: '#F39F9F'
 };
