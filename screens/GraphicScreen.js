@@ -74,20 +74,31 @@ export default class GraphicScreen extends React.Component {
         return result;
     }
 
+   resautlHour = (item) => {
+        timeAsString = item.time.toString();
+        let timeView = (timeAsString.length === 1  ? ('0' + timeAsString) : timeAsString) +  ':00';
+        let temperature = Math.round(item.main.temp);
+        var resaultForHour = { x: timeView, y: temperature };
+        return resaultForHour;
+        }
     chooseDate = (date) => {
         let { forecast } = this.state;
         date = date.format('YYYY-MM-DD');
         let { dateGraphic } = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
-        forecast = this.createDateForecast(forecast);
-        forecast = forecast[index].map(item => {
-            timeAsString = item.time.toString();
-            let timeView = (timeAsString.length === 1  ? ('0' + timeAsString) : timeAsString) +  ':00';
-            let temperature = Math.round(item.main.temp);
-            var resaultForHour = { x: timeView, y: temperature };
-            return resaultForHour;
-            }
-        );
+        var forecasts = this.createDateForecast(forecast);
+        forecast = forecasts[index].map(this.resautlHour);
+        if(forecast.length < 3)
+        {
+
+          let addData = forecasts[index+1].map(this.resautlHour);
+
+          //console.log(addData);
+          console.log('++++++++++');
+          forecast = forecast.concat(addData);
+          console.log(forecast);
+            console.log('++++++++++');
+        }
         newDateGraphic = Array.from(forecast);
         this.setState({dateGraphic: newDateGraphic}, function () {
             console.log(this.state.dateGraphic);
