@@ -12,6 +12,13 @@ export class BarChartExample extends React.PureComponent {
   //     }
   // }
   render() {
+    var a = () => {
+
+      console.log("!!!!!!!!!!!From Graphic!!!!!!!!!!!");
+      console.log(this.props.data);
+      console.log("!!!!!!!!!!!End from Graphic!!!!!!!!!!!");
+    }
+    a();
         return (
           // <View style={{padding: 0, marginTop: 20}}>
           // <Text></Text>
@@ -35,7 +42,7 @@ export class BarChartExample extends React.PureComponent {
               // style={{width: 20, height: 20}}
               //   source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
               // />
-              <Text style={{textAlign: 'center'}}>{point.y}</Text>
+              <Text style={{textAlign: 'center'}}>{point.y}°</Text>
             )
           }}/>//</View>
         )

@@ -13,23 +13,10 @@ export default class GraphicScreen extends React.Component {
         forecast: {}
     };
 
-    getForecast(props) {
-        let {api_key, lat, lon, units} = props;
-        return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
-            .then(forecast => {
-                forecast.json().then(forecastJson => {
-                   this.setState({
-                      forecast: forecastJson
-                    });
-                    this.chooseDate(moment());
-                })
-          });
-    }
-
     constructor(props) {
         super(props);
         getCurrentCoordinates().then(res => props.changeLocation(...res));
-        console.log(this.state.dataGraphic);
+        //console.log(this.state.dataGraphic);
         // this.state = {
         //     dateGraphic: [
         //         { x:   <Image
@@ -49,12 +36,24 @@ export default class GraphicScreen extends React.Component {
         this.getForecast(props);
     }
 
-
-    // addDataGraphic= (date) => {
-    //   var resaut = [];
-    //   forecast.then()
-    //
-    // };
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.getForecast(this.props);
+        }
+    }
+    getForecast(props) {
+        let {api_key, lat, lon, units} = props;
+        console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
+        return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
+            .then(forecast => {
+                forecast.json().then(forecastJson => {
+                   this.setState({
+                      forecast: forecastJson
+                    });
+                    this.chooseDate(moment());
+                })
+          });
+    }
 
    choseBackgroundColor = () => {
         let hours = new Date().getHours();
@@ -68,16 +67,65 @@ export default class GraphicScreen extends React.Component {
             return ([Colors.night, Colors.disabledNight]);
         }
     }
+
+
+   createDateForecast = (forecast) => {
+        let result = [];
+        let temporary = [];
+        forecast.list.forEach((item) => {
+            let tmp = item.dt_txt.split(/[- :]/);
+            tmp[1] = (tmp[1] - 1).toString();
+            let date = new Date(...tmp);
+            let temp = item.main;
+            temporary.push({
+                date: date,
+                time: date.getHours(),
+                main: temp
+            });
+            if (date.getHours() === 0) {
+                result.push(temporary);
+                temporary = [temporary[temporary.length - 1]];
+            }
+        });
+        //console.log(result)
+        return result;
+    }
+
     chooseDate = (date) => {
-        console.log(this.state.forecast);
+        let { forecast } = this.state;
         date = date.format('YYYY-MM-DD');
-        newdate = moment().add(1, 'days').format('YYYY-MM-DD');
         let { dateGraphic } = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
-        // просмотр
-        //console.log(index);
-        //   console.log('------------------------------------------------------------------------------------------');
-        //
+        forecast = this.createDateForecast(forecast);
+        forecast = forecast[index].map(item => {
+            timeAsString = item.time.toString();
+            let timeView = (timeAsString.length === 1  ? ('0' + timeAsString) : timeAsString) +  ':00';
+            let temperature = Math.round(item.main.temp);
+            var resaultForHour = { x: timeView, y: temperature };
+            return resaultForHour;
+            }
+        );
+        newDateGraphic = Array.from(forecast);
+        console.log('!!!!!!!!!!------------------------------------------------------------------------------------------');
+        console.log(newDateGraphic);
+        console.log('!!!!!!!!!!------------------------------------------------------------------------------------------');
+        console.log('++++++++++');
+        this.setState({dateGraphic: newDateGraphic}, function () {
+            console.log(this.state.dateGraphic);
+        });
+
+        console.log('++++++++++');
+        // console.log({ x: '00:00', y: 273 + 18 });
+      //  console.log('++++++++++');
+      //   this.setState({
+      //           dateGraphic:
+      //
+      //          //)
+      // });
+        //console.log(forecast);
+      //  console.log(forecast.list[index]);
+
+
         //var resaultDayForecast = forEach((item)
         // if (date === null) {
         //     this.setState({
