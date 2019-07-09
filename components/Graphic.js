@@ -1,24 +1,9 @@
 import React from 'react'
-//import { AreaChart, BarChart, Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts'
 import {Text, Image, Dimensions, PixelRatio, View} from 'react-native';
-// import { Circle, Path } from 'react-native-svg'
 import PureChart from 'react-native-pure-chart';
 
 export class BarChartExample extends React.PureComponent {
-  // constructor(props) {
-  //     super(props);
-  //     this.state = {
-  //         date: { date: null },
-  //     }
-  // }
   render() {
-    var a = () => {
-
-      console.log("!!!!!!!!!!!From Graphic!!!!!!!!!!!");
-      console.log(this.props.data);
-      console.log("!!!!!!!!!!!End from Graphic!!!!!!!!!!!");
-    }
-    a();
         return (
           // <View style={{padding: 0, marginTop: 20}}>
           // <Text></Text>

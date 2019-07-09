@@ -16,23 +16,6 @@ export default class GraphicScreen extends React.Component {
     constructor(props) {
         super(props);
         getCurrentCoordinates().then(res => props.changeLocation(...res));
-        //console.log(this.state.dataGraphic);
-        // this.state = {
-        //     dateGraphic: [
-        //         { x:   <Image
-        //           style={{width: 20, height: 20, paddingLeft: 10}}
-        //             source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-        //           />, y: 273 + 18 },
-        //         { x: '00:00', y: 273 + 18 },
-        //         { x: '03:00', y: 273 + 14 },
-        //         { x: '06:00', y: 273 + 15 },
-        //         { x: '09:00', y: 273 + 15 },
-        //         { x: '12:00', y: 273 + 17 },
-        //         { x: '15:00', y: 273 + 18 },
-        //         { x: '18:00', y: 273 + 16 },
-        //         { x: '21:00', y: 273 + 14 }
-        //     ]
-        // }
         this.getForecast(props);
     }
 
@@ -106,58 +89,9 @@ export default class GraphicScreen extends React.Component {
             }
         );
         newDateGraphic = Array.from(forecast);
-        console.log('!!!!!!!!!!------------------------------------------------------------------------------------------');
-        console.log(newDateGraphic);
-        console.log('!!!!!!!!!!------------------------------------------------------------------------------------------');
-        console.log('++++++++++');
         this.setState({dateGraphic: newDateGraphic}, function () {
             console.log(this.state.dateGraphic);
         });
-
-        console.log('++++++++++');
-        // console.log({ x: '00:00', y: 273 + 18 });
-      //  console.log('++++++++++');
-      //   this.setState({
-      //           dateGraphic:
-      //
-      //          //)
-      // });
-        //console.log(forecast);
-      //  console.log(forecast.list[index]);
-
-
-        //var resaultDayForecast = forEach((item)
-        // if (date === null) {
-        //     this.setState({
-        //         dateGraphic: [
-        //             { x:   <Image
-        //               style={{width: 20, height: 20, paddingLeft: 10}}
-        //                 source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-        //               />, y: 273 + 18 },
-        //             { x: '00:00', y: 273 + 18 },
-        //             { x: '03:00', y: 273 + 14 },
-        //             { x: '06:00', y: 273 + 15 },
-        //             { x: '09:00', y: 273 + 15 },
-        //             { x: '12:00', y: 273 + 17 },
-        //             { x: '15:00', y: 273 + 18 },
-        //             { x: '18:00', y: 273 + 16 },
-        //             { x: '21:00', y: 273 + 14 }
-        //         ]
-        //     })
-        // } else {
-        //     this.setState({
-        //         dateGraphic: [
-        //             { x: '00:00', y: 18 },
-        //             { x: '03:00', y: 14 },
-        //             { x: '06:00', y: 5 },
-        //             { x: '09:00', y: 15 },
-        //             { x: '12:00', y: 17 },
-        //             { x: '15:00', y: 18 },
-        //             { x: '18:00', y: 16 },
-        //             { x: '21:00', y: 14 }
-        //         ]
-        //     });
-        // }
     };
 
     render() {
