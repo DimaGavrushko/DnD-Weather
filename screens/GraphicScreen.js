@@ -5,15 +5,16 @@ import { BarChartExample } from '../components/Graphic.js'
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
-
+import {getCurrentCoordinates} from "../utils";
 export default class GraphicScreen extends React.Component {
 
     state = {
-        dateGraphic: []
+        dateGraphic: [],
+        forecast: {}
     };
-
     constructor(props) {
         super(props);
+        getCurrentCoordinates().then(res => props.changeLocation(...res));
         console.log(this.state.dataGraphic);
         this.state = {
             dateGraphic: [
@@ -32,6 +33,19 @@ export default class GraphicScreen extends React.Component {
             ]
         }
     }
+
+    getForecast(props) {
+        let {api_key, lat, lon, units} = props;
+        return fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
+            .then(forecast => {
+                forecast.json().then(forecastJson => {
+                   this.setState({
+                      forecast: forecastJson
+                    });
+                })
+          });
+    }
+
 
 
     chooseDate = (date) => {

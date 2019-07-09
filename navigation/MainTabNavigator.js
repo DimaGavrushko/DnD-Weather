@@ -4,6 +4,7 @@ import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import WeatherScreenContainer from '../redux/WeatherScreenContainer';
+import GraphicScreenContainer from '../redux/GraphicScreenContainer';
 import GraphicScreen from '../screens/GraphicScreen';
 import {TabBar} from 'react-native-animated-nav-tab-bar';
 import SettingsScreenContainer from '../redux/SettingsScreenContainer';
@@ -39,7 +40,7 @@ WeatherStack.path = '';
 
 const GraphicStack = createStackNavigator(
     {
-        Graphic: GraphicScreen,
+        Graphic: GraphicScreenContainer,
     },
     config
 );
