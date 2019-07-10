@@ -17,7 +17,6 @@ export default class GraphicScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        //getCurrentCoordinates().then(res => props.changeLocation(...res));
         this.getForecast(props);
     }
 
@@ -29,8 +28,6 @@ export default class GraphicScreen extends React.Component {
 
     getForecast(props) {
         let {api_key, lat, lon, units} = props;
-        units = 'imperial';
-        console.log(units);
         console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
         return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
             .then(forecast => {
@@ -69,7 +66,7 @@ export default class GraphicScreen extends React.Component {
               tmp[1] = (tmp[1] - 1).toString();
               let date = new Date(...tmp);
               let temp = item.main;
-              var resultObj = {
+              let resultObj = {
                   date: date,
                   time: date.getHours(),
                   main: temp
@@ -113,7 +110,6 @@ export default class GraphicScreen extends React.Component {
         let newDateGraphic = Array.from(forecast);
         this.setState({
           dateGraphic: newDateGraphic}, function () {
-            //console.log(this.state.dateGraphic);
         });
     };
 

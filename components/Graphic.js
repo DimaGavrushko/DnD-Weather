@@ -11,58 +11,36 @@ export class BarChartExample extends React.PureComponent {
 
   render() {
     funcOfCustomValueRender = (index, point, unitsValue) => {
-      var tempVal = point.y;
-      var postfix = '';
+      let tempVal = point.y;
+      let postfix = '';
       if (unitsValue === 'imperial') {
-        //tempVal = Math.round((point.y * 9/5) + 32);
         postfix = 'F'
       }
-      else {
+      else if (unitsValue === 'metric') {
         postfix = 'C'
       }
       return (
-      // <Image
-      // style={{width: 20, height: 20}}
-      //   source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-      // />
-      <Text style={{textAlign: 'center'}}>{tempVal}°{postfix}</Text>
+      <Text style={{textAlign: 'center'}}>{tempVal} °{postfix}</Text>
       )
     }
-
+    let valueUnits = this.props.unitsTemp.units;
         return (
-          // <View style={{padding: 0, marginTop: 20}}>
-          // <Text></Text>
           <PureChart type={'line'}
           style={{padding: 0}}
           data={this.props.data}
           width={'90%'}
           height={200}
-          //numberOfYAxisGuideLine={10}
           xAxisColor={'white'}
           yAxisColor={'white'}
           xAxisGridLineColor={'white'}
           yAxisGridLineColor={'white'}
           labelColor={'black'}
-          // minValue={273}
           showEvenNumberXaxisLabel={false}
           customValueRenderer={(index, point) => {
-            return funcOfCustomValueRender(index, point, this.props.unitsTemp);
+            return funcOfCustomValueRender(index, point, valueUnits);
+            }
           }
-        }
-
-
-        //  let tempViewAfterFunction = this.
-
-            //if (index % 1 === 0) return null
-            // return (
-            //   // <Image
-            //   // style={{width: 20, height: 20}}
-            //   //   source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-            //   // />
-            //   <Text style={{textAlign: 'center'}}>{resaultViewTemp({point.y}).toString()}</Text>
-            // )
-          //}
-          />//</View>
+          />
         )
     }
 }
