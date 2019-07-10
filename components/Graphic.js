@@ -6,11 +6,10 @@ export class BarChartExample extends React.PureComponent {
 
   constructor(props) {
       super(props);
-
   }
 
   render() {
-    funcOfCustomValueRender = (index, point, unitsValue) => {
+    const funcOfCustomValueRender = (index, point, unitsValue) => {
       let tempVal = point.y;
       let postfix = '';
       if (unitsValue === 'imperial') {
@@ -19,10 +18,9 @@ export class BarChartExample extends React.PureComponent {
       else if (unitsValue === 'metric') {
         postfix = 'C'
       }
-      return (
-      <Text style={{textAlign: 'center'}}>{tempVal} °{postfix}</Text>
-      )
-    }
+      return (<Text style={{textAlign: 'center'}}>{tempVal} °{postfix}</Text>);
+    };
+
     let valueUnits = this.props.unitsTemp.units;
         return (
           <PureChart type={'line'}
@@ -37,7 +35,7 @@ export class BarChartExample extends React.PureComponent {
           labelColor={'black'}
           showEvenNumberXaxisLabel={false}
           customValueRenderer={(index, point) => {
-            return funcOfCustomValueRender(index, point, valueUnits);
+              return funcOfCustomValueRender(index, point, valueUnits);
             }
           }
           />

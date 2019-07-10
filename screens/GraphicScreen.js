@@ -5,7 +5,6 @@ import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
-import {getCurrentCoordinates} from "../utils";
 
 export default class GraphicScreen extends React.Component {
 
@@ -37,9 +36,9 @@ export default class GraphicScreen extends React.Component {
                         unitsTemp: {units}
 
                     });
-                    this.chooseDate(moment());
-                })
-            });
+                this.chooseDate(moment());
+            })
+        });
     }
 
     choseBackgroundColor = () => {
@@ -61,7 +60,7 @@ export default class GraphicScreen extends React.Component {
     createDateForecast = (forecast) => {
         let result = [];
         let temporary = [];
-        returnDateTimeMainR = (item) => {
+        const returnDateTimeMainInState = (item) => {
               let tmp = item.dt_txt.split(/[- :]/);
               tmp[1] = (tmp[1] - 1).toString();
               let date = new Date(...tmp);
@@ -72,16 +71,16 @@ export default class GraphicScreen extends React.Component {
                   main: temp
               }
               return resultObj;
-            };
+        };
         forecast.list.forEach(function(item, index, array) {
-        let itemToAdd = this.returnDateTimeMainR(item);
-        temporary.push(itemToAdd);
-        if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
-              if((index + 1) < forecast.list.length){
-                temporary.push(this.returnDateTimeMainR(forecast.list[index + 1]));
-              }
-                result.push(temporary);
-                temporary = [];
+            let itemToAdd = returnDateTimeMainInState(item);
+            temporary.push(itemToAdd);
+            if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
+                  if((index + 1) < forecast.list.length) {
+                    temporary.push(returnDateTimeMainInState(forecast.list[index + 1]));
+                  }
+                  result.push(temporary);
+                  temporary = [];
             }
         });
         return result;
@@ -102,14 +101,13 @@ export default class GraphicScreen extends React.Component {
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
         forecast = forecasts[index].map(this.resultHour);
-        forecast[0].x = '         ' + forecast[0].x
+        forecast[0].x = '         ' + forecast[0].x;
         if (forecast.length < 5) {
-            let addData = forecasts[index + 1].map(this.resultHour).slice(1);
-            forecast = forecast.concat(addData);
+            forecast = forecast.concat(forecasts[index + 1].map(this.resultHour).slice(1));
         }
         let newDateGraphic = Array.from(forecast);
         this.setState({
-          dateGraphic: newDateGraphic}, function () {
+            dateGraphic: newDateGraphic
         });
     };
 
@@ -120,7 +118,6 @@ export default class GraphicScreen extends React.Component {
             start: moment(),
             end: moment().add(4, 'days')
         }];
-
         return (
             <View style={styles.container}>
                 <ScrollView>
@@ -149,7 +146,6 @@ export default class GraphicScreen extends React.Component {
                                 style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
                         <BarChartExample data={dateGraphic} unitsTemp={unitsTemp}/>
                     </ScrollView>
-
                 </ScrollView>
             </View>
         );
