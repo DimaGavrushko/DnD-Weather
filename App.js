@@ -4,6 +4,18 @@ import React, {useState} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
+import {createStore} from 'redux';
+import reducer from "./redux/reducer";
+import {Provider} from 'react-redux';
+
+
+let initialState = {
+    api_key: '205d7f0736d1255c7c74c63135bdd4af',
+    lat: '',
+    lon: '',
+    units: 'metric' // Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit
+};
+const store = createStore(reducer, initialState);
 
 export default function App(props) {
     const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -18,10 +30,12 @@ export default function App(props) {
         );
     } else {
         return (
-            <View style={styles.container}>
-                {Platform.OS === 'ios' && <StatusBar barStyle="default"/>}
-                <AppNavigator/>
-            </View>
+            <Provider store={store}>
+                <View style={styles.container}>
+                    {Platform.OS === 'ios' && <StatusBar barStyle="default"/>}
+                    <AppNavigator/>
+                </View>
+            </Provider>
         );
     }
 }
@@ -34,7 +48,8 @@ async function loadResourcesAsync() {
             // We include SpaceMono because we use it in WeatherScreen.js. Feel free to
             // remove this if you are not using it in your app
             'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        }),
+            'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        })
     ]);
 }
 

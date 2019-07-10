@@ -1,29 +1,83 @@
 import React from 'react';
 import {
-    ScrollView,
     StyleSheet,
     View,
-    Text,
+    ScrollView,
+    ActivityIndicator,
+    RefreshControl
 } from 'react-native';
+import WeatherCard from "../components/WeatherCard";
+import ForecastTable from "../components/ForecastTable";
+import {getCurrentCoordinates, getCurrentForecast, getCurrentWeather} from "../utils";
 
 export default class WeatherScreen extends React.Component {
 
-    constructor() {
-        super();
+    state = {
+        isLoading: true,
+        isRefreshing: false,
+        currWeather: {},
+        forecast: {}
+    };
+
+    constructor(props) {
+        super(props);
+        getCurrentCoordinates().then(res => props.changeLocation(...res));
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.setState({isLoading: true});
+            getCurrentWeather(this.props).then(currWeather => {
+                getCurrentForecast(this.props).then(forecast => {
+                    this.setState({
+                        isLoading: false,
+                        currWeather,
+                        forecast
+                    });
+                });
+            });
+        }
+    }
+
+    onRefresh = () => {
+        this.setState({isRefreshing: true});
+        getCurrentWeather(this.props).then(currWeather => {
+            getCurrentForecast(this.props).then(forecast => {
+                this.setState({
+                    isRefreshing: false,
+                    currWeather,
+                    forecast
+                });
+            });
+        });
+    };
+
     render() {
-        return (
-            <View style={styles.container}>
+        const {isLoading, currWeather, forecast} = this.state;
+        if (isLoading || !Object.keys(currWeather).length) {
+            return (
+                <View style={styles.activityIndicator}>
+                    <ActivityIndicator size='large' color='#2B7C85'/>
+                </View>
+            )
+        } else {
+            return (
                 <ScrollView
-                    style={styles.container}
-                    contentContainerStyle={styles.contentContainer}>
-                    <Text>Weather</Text>
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    style={styles.container}>
+                    <WeatherCard currWeather={currWeather} units={this.props.units}/>
+                    <ForecastTable forecast={forecast}/>
                 </ScrollView>
-            </View>
-        );
+            );
+        }
     }
 }
+
 
 WeatherScreen.navigationOptions = {
     title: 'Weather2',
@@ -33,9 +87,12 @@ WeatherScreen.navigationOptions = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         backgroundColor: '#fff',
     },
-    contentContainer: {
-        paddingTop: 30,
+    activityIndicator: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
     }
 });
