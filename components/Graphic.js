@@ -27,7 +27,7 @@ export class BarChartExample extends React.PureComponent {
           style={{padding: 0}}
           data={this.props.data}
           width={'90%'}
-          height={200}
+          height={150}
           xAxisColor={'white'}
           yAxisColor={'white'}
           xAxisGridLineColor={'white'}

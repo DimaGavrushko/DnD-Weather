@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, Image} from 'react-native';
+import {ScrollView, StyleSheet, Text, Image, ActivityIndicator} from 'react-native';
 import {View} from 'react-native'
 import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -9,9 +9,10 @@ import Colors from "../constants/Colors";
 export default class GraphicScreen extends React.Component {
 
     state = {
-        dateGraphic: [],
-        forecast: {},
-        unitsTemp:  ''
+      isLoading: true,
+      dateGraphic: [],
+      forecast: {},
+      unitsTemp:  ''
     };
 
     constructor(props) {
@@ -21,17 +22,20 @@ export default class GraphicScreen extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
+            this.setState({isLoading: true});
             this.getForecast(this.props);
         }
     }
 
     getForecast(props) {
         let {api_key, lat, lon, units} = props;
+        // units = 'imperial'
         console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
         return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
             .then(forecast => {
                 forecast.json().then(forecastJson => {
                     this.setState({
+                        isLoading: false,
                         forecast: forecastJson,
                         unitsTemp: {units}
 
@@ -72,17 +76,21 @@ export default class GraphicScreen extends React.Component {
               }
               return resultObj;
         };
-        forecast.list.forEach(function(item, index, array) {
-            let itemToAdd = returnDateTimeMainInState(item);
-            temporary.push(itemToAdd);
-            if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
-                  if((index + 1) < forecast.list.length) {
-                    temporary.push(returnDateTimeMainInState(forecast.list[index + 1]));
-                  }
-                  result.push(temporary);
-                  temporary = [];
-            }
-        });
+        console.log(forecast.list);
+        if(forecast.list !== undefined)
+        {
+          forecast.list.forEach(function(item, index, array) {
+              let itemToAdd = returnDateTimeMainInState(item);
+              temporary.push(itemToAdd);
+              if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
+                    if((index + 1) < forecast.list.length) {
+                      temporary.push(returnDateTimeMainInState(forecast.list[index + 1]));
+                    }
+                    result.push(temporary);
+                    temporary = [];
+              }
+          });
+        }
         return result;
     };
 
@@ -100,24 +108,32 @@ export default class GraphicScreen extends React.Component {
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
-        forecast = forecasts[index].map(this.resultHour);
-        forecast[0].x = '         ' + forecast[0].x;
-        if (forecast.length < 5) {
-            forecast = forecast.concat(forecasts[index + 1].map(this.resultHour).slice(1));
+        if(forecasts.length !== 0){
+          forecast = forecasts[index].map(this.resultHour);
+          forecast[0].x = '         ' + forecast[0].x;
+          if (forecast.length < 5) {
+              forecast = forecast.concat(forecasts[index + 1].map(this.resultHour).slice(1));
+          }
+          let newDateGraphic = Array.from(forecast);
+          this.setState({
+              dateGraphic: newDateGraphic
+          });
         }
-        let newDateGraphic = Array.from(forecast);
-        this.setState({
-            dateGraphic: newDateGraphic
-        });
     };
 
     render() {
-        let {dateGraphic} = this.state;
-        let {unitsTemp} = this.state;
+      const {isLoading, dateGraphic, unitsTemp} = this.state;
         let datesWhitelist = [{
             start: moment(),
             end: moment().add(4, 'days')
         }];
+        if (isLoading || !Object.keys(dateGraphic).length) {
+            return (
+                <View style={styles.activityIndicator}>
+                    <ActivityIndicator size='large' color='#2B7C85'/>
+                </View>
+            )
+        } else {
         return (
             <View style={styles.container}>
                 <ScrollView>
@@ -151,6 +167,7 @@ export default class GraphicScreen extends React.Component {
             </View>
         );
     }
+  }
 }
 
 GraphicScreen.navigationOptions = {
@@ -163,4 +180,9 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         backgroundColor: '#fff',
     },
+    activityIndicator: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
+    }
 });
