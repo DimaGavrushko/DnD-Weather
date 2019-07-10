@@ -11,12 +11,13 @@ export default class GraphicScreen extends React.Component {
 
     state = {
         dateGraphic: [],
-        forecast: {}
+        forecast: {},
+        unitsTemp:  ''
     };
 
     constructor(props) {
         super(props);
-        getCurrentCoordinates().then(res => props.changeLocation(...res));
+        //getCurrentCoordinates().then(res => props.changeLocation(...res));
         this.getForecast(props);
     }
 
@@ -28,12 +29,16 @@ export default class GraphicScreen extends React.Component {
 
     getForecast(props) {
         let {api_key, lat, lon, units} = props;
+        units = 'imperial';
+        console.log(units);
         console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
         return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
             .then(forecast => {
                 forecast.json().then(forecastJson => {
                     this.setState({
-                        forecast: forecastJson
+                        forecast: forecastJson,
+                        unitsTemp: {units}
+
                     });
                     this.chooseDate(moment());
                 })
@@ -72,10 +77,9 @@ export default class GraphicScreen extends React.Component {
               return resultObj;
             };
         forecast.list.forEach(function(item, index, array) {
-          let itemToAdd = this.returnDateTimeMainR(item);
-          console.log(itemToAdd);
-            temporary.push(itemToAdd);
-            if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
+        let itemToAdd = this.returnDateTimeMainR(item);
+        temporary.push(itemToAdd);
+        if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
               if((index + 1) < forecast.list.length){
                 temporary.push(this.returnDateTimeMainR(forecast.list[index + 1]));
               }
@@ -100,25 +104,22 @@ export default class GraphicScreen extends React.Component {
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
-        console.log();
         forecast = forecasts[index].map(this.resultHour);
-        if (forecast.length < 3) {
-            let addData = forecasts[index + 1].map(this.resultHour);
-            console.log('++++++++++');
-            console.log(forecast);
-            console.log('++++++++++');
+        forecast[0].x = '         ' + forecast[0].x
+        if (forecast.length < 5) {
+            let addData = forecasts[index + 1].map(this.resultHour).slice(1);
             forecast = forecast.concat(addData);
-            console.log(forecast);
-            console.log('++++++++++');
         }
         let newDateGraphic = Array.from(forecast);
-        this.setState({dateGraphic: newDateGraphic}, function () {
-            console.log(this.state.dateGraphic);
+        this.setState({
+          dateGraphic: newDateGraphic}, function () {
+            //console.log(this.state.dateGraphic);
         });
     };
 
     render() {
         let {dateGraphic} = this.state;
+        let {unitsTemp} = this.state;
         let datesWhitelist = [{
             start: moment(),
             end: moment().add(4, 'days')
@@ -150,31 +151,9 @@ export default class GraphicScreen extends React.Component {
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
                                 style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
-                        <BarChartExample data={dateGraphic}/>
+                        <BarChartExample data={dateGraphic} unitsTemp={unitsTemp}/>
                     </ScrollView>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-                                style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                        <Text>Child </Text>
-                    </ScrollView>
+
                 </ScrollView>
             </View>
         );

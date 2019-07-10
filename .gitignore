@@ -1,6 +1,5 @@
 node_modules/*
 !node_modules/react-native-pure-chart/
-
 .expo/*
 npm-debug.*
 *.jks
