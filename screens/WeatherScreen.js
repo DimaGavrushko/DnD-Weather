@@ -26,7 +26,7 @@ export default class WeatherScreen extends React.Component {
 }
 
 WeatherScreen.navigationOptions = {
-    title: 'Weather',
+    title: 'Weather2',
 };
 
 

@@ -11,4 +11,9 @@ export default {
     warningText: '#666804',
     noticeBackground: tintColor,
     noticeText: '#fff',
+    morning: '#71bcf0',
+    day: tintColor,
+    evening: '#18467a',
+    night: '#131862',
+    buttonColor: '#f1b722'
 };
