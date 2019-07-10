@@ -139,7 +139,8 @@ export default class GraphicScreen extends React.Component {
                                        disabledDateNameStyle={{color: this.choseBackgroundColor()[1]}}
                                        disabledDateNumberStyle={{color: this.choseBackgroundColor()[1]}}
                                        selectedDate={datesWhitelist.start}
-                                       onDateSelected={(date = datesWhitelist.start) => this.chooseDate(date)}
+                                       onDateSelected={(date) => this.chooseDate(date)}
+                                       updateWeek = {false}
                                        datesWhitelist={datesWhitelist}/>
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}

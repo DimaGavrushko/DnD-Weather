@@ -49,7 +49,10 @@ const styles = StyleSheet.create({
     forecastDate: {
         fontSize: 18,
         marginTop: -20,
-        textAlignVertical: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlignVertical: 'center',
+        alignSelf: "center"
     },
     forecastIcon: {
         width: 45,
