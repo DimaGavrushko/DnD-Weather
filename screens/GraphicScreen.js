@@ -198,7 +198,7 @@ export default class GraphicScreen extends React.Component {
                                            borderWidth: 1.5,
                                            borderHighlightColor: 'white'
                                        }}
-                                       style={{height: 110, paddingTop: 10, paddingBottom: 10, marginBottom: 10}}
+                                       style={{height: 115, paddingTop: 9, paddingBottom: 10, marginBottom: 10}}
                                        calendarHeaderStyle={{color: 'white'}}
                                        calendarColor={this.choseBackgroundColor()[0]}
                                        dateNumberStyle={{color: 'white'}}
