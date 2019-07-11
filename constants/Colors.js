@@ -16,4 +16,6 @@ export default {
     evening: '#18467a',
     night: '#131862',
     buttonColor: '#f1b722'
+    disabledDay: 'red',
+    disabledNight: '#F39F9F'
 };
