@@ -5,6 +5,7 @@ import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
+import {getCurrentForecast} from "../utils";
 
 export default class GraphicScreen extends React.Component {
 
@@ -34,26 +35,19 @@ export default class GraphicScreen extends React.Component {
     };
 
     getForecast(props) {
-        let {api_key, lat, lon, units} = props;
-        console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
-        return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
-            .then(forecast => {
-                forecast.json().then(forecastJson => {
-                    this.setState({
-                        isRefreshing: false,
-                        isLoading: false,
-                        forecast: forecastJson,
-                        unitsTemp: {units}
-
-                    });
-                    if(this.state.date) {
-                      this.chooseDate(this.state.date);
-                    }
-                    else {
-                      this.chooseDate(moment());
-                    }
-
-            })
+        getCurrentForecast(props).then(forecast => {
+            this.setState({
+                isRefreshing: false,
+                isLoading: false,
+                forecast: forecast,
+                unitsTemp: props.units
+            });
+            if(this.state.date) {
+                this.chooseDate(this.state.date);
+            }
+            else {
+                this.chooseDate(moment());
+            }
         });
     }
 
@@ -70,9 +64,6 @@ export default class GraphicScreen extends React.Component {
         }
     };
 
-
-
-
     createDateForecast = (forecast) => {
         let result = [];
         let temporary = [];
@@ -85,7 +76,7 @@ export default class GraphicScreen extends React.Component {
                   date: date,
                   time: date.getHours(),
                   main: temp
-              }
+              };
               return resultObj;
         };
         if(forecast.list !== undefined)
@@ -114,14 +105,12 @@ export default class GraphicScreen extends React.Component {
           tempFromPops = (tempFromPops - 32) * 5/9;
         }
         let temperature = Math.round(tempFromPops);
-        let resultForHour = {x: timeView, y: temperature};
-        return resultForHour;
+        return {x: timeView, y: temperature};
     };
 
     chooseDate = (dateChoosen) => {
         let {forecast, unitsTemp} = this.state;
-        date = dateChoosen.format('YYYY-MM-DD');
-        let {dateGraphic} = this.state;
+        let date = dateChoosen.format('YYYY-MM-DD');
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
         if(forecasts.length !== 0){
