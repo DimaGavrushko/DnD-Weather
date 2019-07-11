@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, Image, ActivityIndicator} from 'react-native';
+import {ScrollView, StyleSheet, Text, Image, ActivityIndicator, RefreshControl} from 'react-native';
 import {View} from 'react-native'
 import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -10,6 +10,8 @@ export default class GraphicScreen extends React.Component {
 
     state = {
       isLoading: true,
+      isRefreshing: false,
+      date: '',
       dateGraphic: [],
       forecast: {},
       unitsTemp:  ''
@@ -26,6 +28,10 @@ export default class GraphicScreen extends React.Component {
             this.getForecast(this.props);
         }
     }
+    onRefresh = () => {
+        this.setState({isRefreshing: true});
+        this.getForecast(this.props);
+    };
 
     getForecast(props) {
         let {api_key, lat, lon, units} = props;
@@ -34,12 +40,19 @@ export default class GraphicScreen extends React.Component {
             .then(forecast => {
                 forecast.json().then(forecastJson => {
                     this.setState({
+                        isRefreshing: false,
                         isLoading: false,
                         forecast: forecastJson,
                         unitsTemp: {units}
 
                     });
-                this.chooseDate(moment());
+                    if(this.state.date) {
+                      this.chooseDate(this.state.date);
+                    }
+                    else {
+                      this.chooseDate(moment());
+                    }
+
             })
         });
     }
@@ -105,9 +118,9 @@ export default class GraphicScreen extends React.Component {
         return resultForHour;
     };
 
-    chooseDate = (date) => {
+    chooseDate = (dateChoosen) => {
         let {forecast, unitsTemp} = this.state;
-        date = date.format('YYYY-MM-DD');
+        date = dateChoosen.format('YYYY-MM-DD');
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
@@ -120,6 +133,7 @@ export default class GraphicScreen extends React.Component {
           let newDateGraphic = Array.from(forecast);
           this.setState({
               dateGraphic: newDateGraphic,
+              date: dateChoosen,
               unitsTemp
           });
         }
@@ -140,7 +154,12 @@ export default class GraphicScreen extends React.Component {
         } else {
         return (
             <View style={styles.container}>
-                <ScrollView>
+                <ScrollView refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.isRefreshing}
+                        onRefresh={this.onRefresh}
+                    />
+                }>
                     <View style={{flex: 1}}>
                         <CalendarStrip calendarAnimation={{type: 'sequence', duration: 30}}
                                        daySelectionAnimation={{
