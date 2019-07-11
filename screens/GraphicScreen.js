@@ -132,6 +132,9 @@ export default class GraphicScreen extends React.Component {
         {
           tempFromPops = (tempFromPops - 32) * 5/9;
         }
+        else if(unitsTemp === ''){
+          tempFromPops -= 273;
+        }
         let temperature = Math.round(tempFromPops);
         let resultForHour = {x: timeView, y: temperature};
         return resultForHour;

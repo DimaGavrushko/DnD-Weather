@@ -25,6 +25,10 @@ export class BarChartExample extends React.PureComponent {
         tempVal = Math.round((tempVal * 9/5) + 32);
         postfix = 'F'
       }
+      else if (unitsValue === '') {
+        tempVal += 273 ;
+        postfix = 'K'
+      }
       else if (unitsValue === 'metric') {
         postfix = 'C'
       }
