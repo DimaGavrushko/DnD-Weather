@@ -13,7 +13,8 @@ let initialState = {
     api_key: '205d7f0736d1255c7c74c63135bdd4af',
     lat: '',
     lon: '',
-    units: 'metric' // Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit
+    units: 'metric', // Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit
+    city: ''
 };
 const store = createStore(reducer, initialState);
 

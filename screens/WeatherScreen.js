@@ -34,6 +34,7 @@ export default class WeatherScreen extends React.Component {
                         currWeather,
                         forecast
                     });
+                    this.props.changeCity(currWeather.name);
                 });
             });
         }

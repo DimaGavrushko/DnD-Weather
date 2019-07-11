@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import WeatherScreen from "../screens/WeatherScreen";
-import {CHANGE_LOCATION} from "./reducer";
+import {CHANGE_CITY, CHANGE_LOCATION} from "./reducer";
 
 const mapStateToProps = ({api_key, lat, lon,  units}) => ({
     api_key,
@@ -19,8 +19,16 @@ function changeLocation(lat, lon) {
     }
 }
 
+function changeCity(city) {
+    return {
+        type: CHANGE_CITY,
+        payload: city
+    }
+}
+
 const mapDispatchToProps = {
-    changeLocation
+    changeLocation,
+    changeCity
 };
 
 const WeatherScreenContainer = connect(mapStateToProps, mapDispatchToProps)(WeatherScreen);
