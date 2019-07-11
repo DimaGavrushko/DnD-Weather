@@ -34,6 +34,7 @@ export default class WeatherScreen extends React.Component {
                         currWeather,
                         forecast
                     });
+                    this.props.changeCity(currWeather.name);
                 });
             });
         }
@@ -80,7 +81,7 @@ export default class WeatherScreen extends React.Component {
 
 
 WeatherScreen.navigationOptions = {
-    title: 'Weather2',
+    title: 'Weather',
 };
 
 

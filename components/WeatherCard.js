@@ -2,6 +2,7 @@ import React from 'react';
 import {MonoText} from "./StyledText";
 import {Image, StyleSheet, View} from "react-native";
 import Colors from "../constants/Colors";
+import {choseBackgroundColor} from "../utils";
 
 export default class WeatherCard extends React.Component {
 
@@ -44,19 +45,6 @@ function getCurrentUnit(units) {
             return '\u2109';
         default:
             return '\u212A';
-    }
-}
-
-function choseBackgroundColor() {
-    let hours = new Date().getHours();
-    if (hours >= 6 && hours < 12) {
-        return Colors.morning;
-    } else if (hours >= 12 && hours < 18) {
-        return Colors.day;
-    } else if (hours >= 18 && hours <= 23) {
-        return Colors.evening;
-    } else if (hours >= 0 && hours < 6) {
-        return Colors.night;
     }
 }
 
