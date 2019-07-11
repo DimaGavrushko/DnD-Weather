@@ -1,3 +1,5 @@
+import Colors from "./constants/Colors";
+
 export function getCurrentCoordinates() {
     return new Promise((res, rej) => {
         navigator.geolocation.getCurrentPosition(
@@ -32,4 +34,17 @@ export function getCurrentForecast(props) {
                 return forecastJson;
             });
         });
+}
+
+export function choseBackgroundColor() {
+    let hours = new Date().getHours();
+    if (hours >= 6 && hours < 12) {
+        return Colors.morning;
+    } else if (hours >= 12 && hours < 18) {
+        return Colors.day;
+    } else if (hours >= 18 && hours <= 23) {
+        return Colors.evening;
+    } else if (hours >= 0 && hours < 6) {
+        return Colors.night;
+    }
 }
