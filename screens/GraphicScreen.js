@@ -10,12 +10,12 @@ import {getCurrentForecast} from "../utils";
 export default class GraphicScreen extends React.Component {
 
     state = {
-      isLoading: true,
-      isRefreshing: false,
-      date: '',
-      dateGraphic: [],
-      forecast: {},
-      unitsTemp:  ''
+        isLoading: true,
+        isRefreshing: false,
+        date: '',
+        dateGraphic: [],
+        forecast: {},
+        unitsTemp: ''
     };
 
     constructor(props) {
@@ -29,6 +29,7 @@ export default class GraphicScreen extends React.Component {
             this.getForecast(this.props);
         }
     }
+
     onRefresh = () => {
         this.setState({isRefreshing: true});
         this.getForecast(this.props);
@@ -42,7 +43,7 @@ export default class GraphicScreen extends React.Component {
                 forecast: forecast,
                 unitsTemp: props.units
             });
-            if(this.state.date) {
+            if (this.state.date) {
                 this.chooseDate(this.state.date);
             }
             else {
@@ -68,30 +69,29 @@ export default class GraphicScreen extends React.Component {
         let result = [];
         let temporary = [];
         const returnDateTimeMainInState = (item) => {
-              let tmp = item.dt_txt.split(/[- :]/);
-              tmp[1] = (tmp[1] - 1).toString();
-              let date = new Date(...tmp);
-              let temp = item.main;
-              let resultObj = {
-                  date: date,
-                  time: date.getHours(),
-                  main: temp
-              };
-              return resultObj;
+            let tmp = item.dt_txt.split(/[- :]/);
+            tmp[1] = (tmp[1] - 1).toString();
+            let date = new Date(...tmp);
+            let temp = item.main;
+            let resultObj = {
+                date: date,
+                time: date.getHours(),
+                main: temp
+            };
+            return resultObj;
         };
-        if(forecast.list !== undefined)
-        {
-          forecast.list.forEach(function(item, index, array) {
-              let itemToAdd = returnDateTimeMainInState(item);
-              temporary.push(itemToAdd);
-              if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
-                    if((index + 1) < forecast.list.length) {
-                      temporary.push(returnDateTimeMainInState(forecast.list[index + 1]));
+        if (forecast.list !== undefined) {
+            forecast.list.forEach(function (item, index, array) {
+                let itemToAdd = returnDateTimeMainInState(item);
+                temporary.push(itemToAdd);
+                if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
+                    if ((index + 1) < forecast.list.length) {
+                        temporary.push(returnDateTimeMainInState(forecast.list[index + 1]));
                     }
                     result.push(temporary);
                     temporary = [];
-              }
-          });
+                }
+            });
         }
         return result;
     };
@@ -100,9 +100,8 @@ export default class GraphicScreen extends React.Component {
         let timeAsString = item.time.toString();
         let timeView = (timeAsString.length === 1 ? ('0' + timeAsString) : timeAsString) + ':00';
         let tempFromPops = item.main.temp;
-        if(unitsTemp === 'imperial')
-        {
-          tempFromPops = (tempFromPops - 32) * 5/9;
+        if (unitsTemp === 'imperial') {
+            tempFromPops = (tempFromPops - 32) * 5 / 9;
         }
         let temperature = Math.round(tempFromPops);
         return {x: timeView, y: temperature};
@@ -113,23 +112,27 @@ export default class GraphicScreen extends React.Component {
         let date = dateChoosen.format('YYYY-MM-DD');
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
-        if(forecasts.length !== 0){
-          forecast = forecasts[index].map((item) => {return this.resultHour(item, unitsTemp.units)});
-          forecast[0].x = '         ' + forecast[0].x;
-          if (forecast.length < 4) {
-              forecast = forecast.concat(forecasts[index + 1].map((item) => {return this.resultHour(item, unitsTemp.units)}).slice(1));
-          }
-          let newDateGraphic = Array.from(forecast);
-          this.setState({
-              dateGraphic: newDateGraphic,
-              date: dateChoosen,
-              unitsTemp
-          });
+        if (forecasts.length !== 0) {
+            forecast = forecasts[index].map((item) => {
+                return this.resultHour(item, unitsTemp.units)
+            });
+            forecast[0].x = '         ' + forecast[0].x;
+            if (forecast.length < 4) {
+                forecast = forecast.concat(forecasts[index + 1].map((item) => {
+                    return this.resultHour(item, unitsTemp.units)
+                }).slice(1));
+            }
+            let newDateGraphic = Array.from(forecast);
+            this.setState({
+                dateGraphic: newDateGraphic,
+                date: dateChoosen,
+                unitsTemp
+            });
         }
     };
 
     render() {
-      const {isLoading, dateGraphic, unitsTemp} = this.state;
+        const {isLoading, dateGraphic, unitsTemp} = this.state;
         let datesWhitelist = [{
             start: moment(),
             end: moment().add(4, 'days')
@@ -141,45 +144,45 @@ export default class GraphicScreen extends React.Component {
                 </View>
             )
         } else {
-        return (
-            <View style={styles.container}>
-                <ScrollView refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.isRefreshing}
-                        onRefresh={this.onRefresh}
-                    />
-                }>
-                    <View style={{flex: 1}}>
-                        <CalendarStrip calendarAnimation={{type: 'sequence', duration: 30}}
-                                       daySelectionAnimation={{
-                                           type: 'border',
-                                           duration: 200,
-                                           borderWidth: 1.5,
-                                           borderHighlightColor: 'white'
-                                       }}
-                                       style={{height: 110, paddingTop: 10, paddingBottom: 10, marginBottom: 10}}
-                                       calendarHeaderStyle={{color: 'white'}}
-                                       calendarColor={this.choseBackgroundColor()[0]}
-                                       dateNumberStyle={{color: 'white'}}
-                                       dateNameStyle={{color: 'white'}}
-                                       highlightDateNumberStyle={{color: 'yellow'}}
-                                       highlightDateNameStyle={{color: 'yellow'}}
-                                       disabledDateNameStyle={{color: this.choseBackgroundColor()[1]}}
-                                       disabledDateNumberStyle={{color: this.choseBackgroundColor()[1]}}
-                                       selectedDate={datesWhitelist.start}
-                                       onDateSelected={(date) => this.chooseDate(date)}
-                                       updateWeek = {false}
-                                       datesWhitelist={datesWhitelist}/>
-                    </View>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-                                style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
-                        <BarChartExample data={dateGraphic} unitsTemp={unitsTemp}/>
+            return (
+                <View style={styles.container}>
+                    <ScrollView refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }>
+                        <View style={{flex: 1}}>
+                            <CalendarStrip calendarAnimation={{type: 'sequence', duration: 30}}
+                                           daySelectionAnimation={{
+                                               type: 'border',
+                                               duration: 200,
+                                               borderWidth: 1.5,
+                                               borderHighlightColor: 'white'
+                                           }}
+                                           style={{height: 110, paddingTop: 10, paddingBottom: 10, marginBottom: 10}}
+                                           calendarHeaderStyle={{color: 'white'}}
+                                           calendarColor={this.choseBackgroundColor()[0]}
+                                           dateNumberStyle={{color: 'white'}}
+                                           dateNameStyle={{color: 'white'}}
+                                           highlightDateNumberStyle={{color: 'yellow'}}
+                                           highlightDateNameStyle={{color: 'yellow'}}
+                                           disabledDateNameStyle={{color: this.choseBackgroundColor()[1]}}
+                                           disabledDateNumberStyle={{color: this.choseBackgroundColor()[1]}}
+                                           selectedDate={datesWhitelist.start}
+                                           onDateSelected={(date) => this.chooseDate(date)}
+                                           updateWeek={false}
+                                           datesWhitelist={datesWhitelist}/>
+                        </View>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+                                    style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
+                            <BarChartExample data={dateGraphic} unitsTemp={unitsTemp}/>
+                        </ScrollView>
                     </ScrollView>
-                </ScrollView>
-            </View>
-        );
+                </View>
+            );
+        }
     }
-  }
 }
 
 GraphicScreen.navigationOptions = {
