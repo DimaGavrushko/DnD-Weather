@@ -5,7 +5,7 @@ import BarChartExample from '../components/Graphic.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
-
+import LineChart from '../node_modules/react-native-pure-chart/examples/pure-chart/components/line-chart.js'
 export default class GraphicScreen extends React.Component {
 
     state = {
@@ -14,14 +14,25 @@ export default class GraphicScreen extends React.Component {
       date: '',
       dateGraphic: [],
       forecast: {},
-      unitsTemp:  ''
+      unitsTemp:  '',
+      index: 0,
+      allInfoWeatherDay: {},
+      weatherFirstDayIndex:  null
     };
 
     constructor(props) {
         super(props);
+        this.changeState = this.changeState.bind(this)
         this.getForecast(props);
     }
 
+    changeState(num) {
+      console.log("Work OF MAIN take num = " + num);
+
+    this.setState({
+      index: num
+    })
+  }
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({isLoading: true});
@@ -43,7 +54,9 @@ export default class GraphicScreen extends React.Component {
                         isRefreshing: false,
                         isLoading: false,
                         forecast: forecastJson,
-                        unitsTemp: {units}
+                        unitsTemp: {units},
+                        index: 0,
+                        weatherFirstDayIndex:  null,
 
                     });
                     if(this.state.date) {
@@ -81,16 +94,22 @@ export default class GraphicScreen extends React.Component {
               tmp[1] = (tmp[1] - 1).toString();
               let date = new Date(...tmp);
               let temp = item.main;
+              let weather = item.weather;
+              let wind = item.wind;
               let resultObj = {
                   date: date,
                   time: date.getHours(),
-                  main: temp
+                  main: temp,
+                  weather: weather,
+                  wind: wind
+
               }
               return resultObj;
         };
         if(forecast.list !== undefined)
         {
           forecast.list.forEach(function(item, index, array) {
+            //console.log(item);
               let itemToAdd = returnDateTimeMainInState(item);
               temporary.push(itemToAdd);
               if (itemToAdd.date.getHours() === 21 || index + 1 === forecast.list.length) {
@@ -120,6 +139,7 @@ export default class GraphicScreen extends React.Component {
 
     chooseDate = (dateChoosen) => {
         let {forecast, unitsTemp} = this.state;
+        this.setState({index: 0});
         date = dateChoosen.format('YYYY-MM-DD');
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
@@ -128,13 +148,20 @@ export default class GraphicScreen extends React.Component {
           forecast = forecasts[index].map((item) => {return this.resultHour(item, unitsTemp.units)});
           forecast[0].x = '         ' + forecast[0].x;
           if (forecast.length < 4) {
+            this.setState({weatherFirstDayIndex: forecast.length - 1});
               forecast = forecast.concat(forecasts[index + 1].map((item) => {return this.resultHour(item, unitsTemp.units)}).slice(1));
           }
           let newDateGraphic = Array.from(forecast);
           this.setState({
               dateGraphic: newDateGraphic,
               date: dateChoosen,
+              allInfoWeatherDay: forecasts[index],
               unitsTemp
+          }, () => {
+            console.log(' START state.forecasts[index](after createDateForecast)');
+            console.log(forecasts[index]);
+            console.log(' END state.forecast');
+
           });
         }
     };
@@ -184,8 +211,9 @@ export default class GraphicScreen extends React.Component {
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
                                 style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
-                        <BarChartExample data={dateGraphic} unitsTemp={unitsTemp}/>
+                        <BarChartExample data={dateGraphic} unitsTemp={unitsTemp} changeState = {this.changeState}/>
                     </ScrollView>
+                    <Text>Hello {this.state.index}</Text>
                 </ScrollView>
             </View>
         );

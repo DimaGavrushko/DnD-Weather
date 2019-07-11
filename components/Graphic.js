@@ -4,11 +4,20 @@ import PureChart from 'react-native-pure-chart';
 
 export class BarChartExample extends React.PureComponent {
 
+  state = {
+    update: false
+  }
   constructor(props) {
       super(props);
+      this.indexBarChart = this.indexBarChart.bind(this);
   }
-
+  indexBarChart(num)
+  {
+    console.log("Work OF CENTER");
+    this.props.changeState(num);
+  }
   render() {
+
     const funcOfCustomValueRender = (index, point, unitsValue) => {
       let tempVal = point.y;
       let postfix = '';
@@ -25,6 +34,7 @@ export class BarChartExample extends React.PureComponent {
     let valueUnits = this.props.unitsTemp.units;
         return (
           <PureChart type={'line'}
+          indexBarChart = {this.indexBarChart}
           style={{padding: 0}}
           data={this.props.data}
           width={'90%'}
