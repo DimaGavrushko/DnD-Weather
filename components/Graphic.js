@@ -13,12 +13,13 @@ export class BarChartExample extends React.PureComponent {
       let tempVal = point.y;
       let postfix = '';
       if (unitsValue === 'imperial') {
+        tempVal = Math.round((tempVal * 9/5) + 32);
         postfix = 'F'
       }
       else if (unitsValue === 'metric') {
         postfix = 'C'
       }
-      return (<Text style={{textAlign: 'center'}}>{tempVal} °{postfix}</Text>);
+      return (<Text style={{textAlign: 'center'}}>{tempVal}°</Text>);
     };
 
     let valueUnits = this.props.unitsTemp.units;
@@ -28,6 +29,7 @@ export class BarChartExample extends React.PureComponent {
           data={this.props.data}
           width={'90%'}
           height={150}
+          units = {valueUnits}
           xAxisColor={'white'}
           yAxisColor={'white'}
           xAxisGridLineColor={'white'}

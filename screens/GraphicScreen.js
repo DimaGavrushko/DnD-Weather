@@ -29,7 +29,6 @@ export default class GraphicScreen extends React.Component {
 
     getForecast(props) {
         let {api_key, lat, lon, units} = props;
-        // units = 'imperial'
         console.log(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`);
         return fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=${units}`)
             .then(forecast => {
@@ -76,7 +75,6 @@ export default class GraphicScreen extends React.Component {
               }
               return resultObj;
         };
-        console.log(forecast.list);
         if(forecast.list !== undefined)
         {
           forecast.list.forEach(function(item, index, array) {
@@ -94,29 +92,35 @@ export default class GraphicScreen extends React.Component {
         return result;
     };
 
-    resultHour = (item) => {
+    resultHour = (item, unitsTemp) => {
         let timeAsString = item.time.toString();
         let timeView = (timeAsString.length === 1 ? ('0' + timeAsString) : timeAsString) + ':00';
-        let temperature = Math.round(item.main.temp);
+        let tempFromPops = item.main.temp;
+        if(unitsTemp === 'imperial')
+        {
+          tempFromPops = (tempFromPops - 32) * 5/9;
+        }
+        let temperature = Math.round(tempFromPops);
         let resultForHour = {x: timeView, y: temperature};
         return resultForHour;
     };
 
     chooseDate = (date) => {
-        let {forecast} = this.state;
+        let {forecast, unitsTemp} = this.state;
         date = date.format('YYYY-MM-DD');
         let {dateGraphic} = this.state;
         let index = Math.abs((moment().startOf('day')).diff(date, 'days'));
         let forecasts = this.createDateForecast(forecast);
         if(forecasts.length !== 0){
-          forecast = forecasts[index].map(this.resultHour);
+          forecast = forecasts[index].map((item) => {return this.resultHour(item, unitsTemp.units)});
           forecast[0].x = '         ' + forecast[0].x;
-          if (forecast.length < 5) {
-              forecast = forecast.concat(forecasts[index + 1].map(this.resultHour).slice(1));
+          if (forecast.length < 4) {
+              forecast = forecast.concat(forecasts[index + 1].map((item) => {return this.resultHour(item, unitsTemp.units)}).slice(1));
           }
           let newDateGraphic = Array.from(forecast);
           this.setState({
-              dateGraphic: newDateGraphic
+              dateGraphic: newDateGraphic,
+              unitsTemp
           });
         }
     };
