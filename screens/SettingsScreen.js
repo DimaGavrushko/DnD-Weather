@@ -15,6 +15,26 @@ let radio_props = [
 
 export default class SettingsScreen extends React.Component {
 
+    state = {
+        isValid: true,
+        api_key: this.props.api_key
+    };
+
+    checkApiKey(key) {
+        fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${this.props.lat}&lon=${this.props.lon}&appid=${key}`)
+            .then(currWeather => {
+                if (currWeather.status !== 200) {
+                    this.setState({
+                        isValid: false,
+                        api_key: this.props.api_key
+                    })
+                } else {
+                    this.props.changeApiKey(key);
+                    this.setState({isValid: true, api_key: this.props.api_key});
+                }
+            });
+    }
+
     render() {
         return (
             <View>
@@ -84,19 +104,21 @@ export default class SettingsScreen extends React.Component {
                     <MonoText style={styles.label}>
                         Set API key
                     </MonoText>
+
                     <TextInput
                         style={{
                             height: 53,
                             backgroundColor: 'white',
-                            borderColor: Colors.evening,
-                            borderWidth: 1,
+                            borderColor: this.state.isValid ? Colors.evening: 'red',
+                            borderWidth: this.state.isValid ? 1 : 3,
                             paddingLeft: 13,
                             borderRadius: 5,
                         }}
                         placeholder="Start typing"
                         placeholderTextColor={'grey'}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.props.api_key}
+                        onChangeText={api_key => this.setState({api_key})}
+                        onBlur={() => this.setState({isValid: true})}
+                        value={this.state.api_key}
                     />
                     <View style={{
                         padding: 5,
@@ -104,7 +126,7 @@ export default class SettingsScreen extends React.Component {
                         width: 100
                     }}>
                         <Button
-                            onPress={() => alert("JSON.stringify(value)")}
+                            onPress={() => this.checkApiKey(this.state.api_key)}
                             title="Submit"
                             color={Colors.buttonColor}
                         />
