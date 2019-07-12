@@ -6,6 +6,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import Colors from "../constants/Colors";
 import LineChart from '../node_modules/react-native-pure-chart/examples/pure-chart/components/line-chart.js'
+import GraphicInfoTable from '../components/GraphicInfoTable.js';
 export default class GraphicScreen extends React.Component {
 
     state = {
@@ -212,11 +213,12 @@ export default class GraphicScreen extends React.Component {
                                        updateWeek = {false}
                                        datesWhitelist={datesWhitelist}/>
                     </View>
+                    <View style={{flex: 1}}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
                                 style={{paddingTop: 10, paddingBottom: 10, margin: 0}}>
                         <BarChartExample data={dateGraphic} unitsTemp={unitsTemp} changeState = {this.changeState}/>
-                    </ScrollView>
-                    <Text>Hello {this.state.index}</Text>
+                    </ScrollView></View>
+                    <GraphicInfoTable allInfoWeatherDay={(this.state.allInfoWeatherDay[this.state.index])} unitsTemp={unitsTemp} />
                 </ScrollView>
             </View>
         );
