@@ -20,12 +20,10 @@ export default class GraphicInfoTable extends React.Component {
           let postfix = '';
           let prefix = ''
           if (unitsValue === 'imperial') {
-          //  tempVal = Math.round((tempVal * 9/5) + 32);
             postfix = ' °F'
           }
           else if (unitsValue === '') {
-            //tempVal += 273 ;
-            postfix = 'K'
+            postfix = ' K'
           }
           else if (unitsValue === 'metric') {
             postfix = ' °C'

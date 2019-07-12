@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, TextInput} from 'react-native';
+import {Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard} from 'react-native';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import cities from '../current.city.list.min';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -38,6 +38,7 @@ export default class SettingsScreen extends React.Component {
     render() {
         return (
             <View>
+            <TouchableOpacity activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                 <View style={styles.container}>
 
                     <View style={styles.subcontainer}>
@@ -52,7 +53,6 @@ export default class SettingsScreen extends React.Component {
                     <MonoText style={styles.label}>
                         Find by geolocation
                     </MonoText>
-
                     <Button
                         onPress={() => getCurrentCoordinates().then(res => this.props.changeLocation(...res))}
                         title="Get my location"
@@ -165,6 +165,7 @@ export default class SettingsScreen extends React.Component {
                         ))}
                     </RadioForm>
                 </View>
+                </TouchableOpacity>
             </View>
         );
     }
